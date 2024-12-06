@@ -160,7 +160,7 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
                                   'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}',
                               additionalOptions: {
                                 'accessToken':
-                                    'sk.eyJ1IjoiaGlzc2FiYXRpIiwiYSI6ImNtNDhkYml1cDBpMWMyanNkY3U3eTVvbGUifQ.Rjhun4aPzrPu4bev3HqF3Q',
+                                    '',
                                 'id': 'mapbox/satellite-v9',
                               },
                             ),
