@@ -12,14 +12,14 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await setPreferredOrientations();
   
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
   
   await ServiceLocator.configureDependencies();
 
-  final notificationService = getIt<NotificationService>();
-  await notificationService.initialize();
+  // final notificationService = getIt<NotificationService>();
+  //await notificationService.initialize();
 
   runApp(MyApp());
 }

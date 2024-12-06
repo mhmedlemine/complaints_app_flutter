@@ -11,17 +11,25 @@ class User {
     this.roles,
   });
 
-  factory User.fromMap(Map<String, dynamic> json) => User(
+  factory User.fromServerJson(Map<String, dynamic> json) => User(
         phonenumber: json["user"]["phonenumber"],
         name: json["user"]["name"],
         token: json["token"],
-        roles: json["roles"],
+        roles: json["roles"] ,
       );
 
-  Map<String, dynamic> toMap() => {
+  factory User.fromJson(Map<String, dynamic> json) => User(
+        phonenumber: json["phonenumber"],
+        name: json["name"],
+        token: json["token"],
+        roles: json["roles"] ,
+      );
+
+  Map<String, dynamic> toJson() => {
         "phonenumber": phonenumber,
         "name": name,
         "token": token,
+        "roles": roles,
       };
   
 }

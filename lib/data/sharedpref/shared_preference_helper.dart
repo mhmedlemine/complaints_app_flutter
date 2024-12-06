@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:complaintsapp/domain/entity/user/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'constants/preferences.dart';
@@ -22,6 +24,29 @@ class SharedPreferenceHelper {
 
   Future<bool> removeAuthToken() async {
     return _sharedPreference.remove(Preferences.auth_token);
+  }
+
+  Future<User?> get loggedInUser async {
+    try {       
+      final jsonStr = _sharedPreference.getString(Preferences.user) ?? '';
+      final user = User.fromJson(jsonDecode(jsonStr));
+      return user;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<bool> saveUser(User user) async {
+    try {
+      final jsonStr = jsonEncode(user);
+      return _sharedPreference.setString(Preferences.user, jsonStr);
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> removeAuthUser() async {
+    return _sharedPreference.remove(Preferences.user);
   }
 
   // Login:---------------------------------------------------------------------

@@ -11,4 +11,6 @@ abstract class UserRepository {
   Future<void> saveIsLoggedIn(bool value);
 
   Future<bool> get isLoggedIn;
+
+  Future<User?> get loggedInUser;
 }

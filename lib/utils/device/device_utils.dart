@@ -1,5 +1,8 @@
 //
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// Helper class for device related operations.
 ///
@@ -35,4 +38,56 @@ class DeviceUtils {
   ///
   static double getScaledHeight(BuildContext context, double scale) =>
       scale * MediaQuery.of(context).size.height;
+
+  /// Launch phone dialer with the given phone number
+  static Future<void> makePhoneCall(String phoneNumber) async {
+    // Remove any non-digit characters from the phone number
+    final cleanNumber = phoneNumber.replaceAll(RegExp(r'[^\d+]'), '');
+    
+    final Uri phoneUri = Uri(
+      scheme: 'tel',
+      path: cleanNumber,
+    );
+    
+    try {
+      if (await canLaunchUrl(phoneUri)) {
+        await launchUrl(phoneUri);
+      } else {
+        throw 'Could not launch phone dialer';
+      }
+    } catch (e) {
+      print('Error launching phone dialer: $e');
+    }
+  }
+
+  /// Open location in maps app using coordinates
+  static Future<void> openLocation({
+    required double latitude,
+    required double longitude,
+    String? label,
+  }) async {
+    final Uri mapsUri;
+    
+    if (Platform.isIOS) {
+      // Apple Maps URL scheme
+      mapsUri = Uri.parse(
+        'https://maps.apple.com/?ll=$latitude,$longitude&q=${label ?? "Location"}',
+      );
+    } else {
+      // Google Maps URL scheme
+      mapsUri = Uri.parse(
+        'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude',
+      );
+    }
+
+    try {
+      if (await canLaunchUrl(mapsUri)) {
+        await launchUrl(mapsUri, mode: LaunchMode.externalApplication);
+      } else {
+        throw 'Could not launch maps';
+      }
+    } catch (e) {
+      print('Error launching maps: $e');
+    }
+  }
 }

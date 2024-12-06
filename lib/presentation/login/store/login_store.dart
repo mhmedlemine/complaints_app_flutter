@@ -2,6 +2,7 @@ import 'package:complaintsapp/core/services/notification_service.dart';
 import 'package:complaintsapp/core/stores/error/error_store.dart';
 import 'package:complaintsapp/core/stores/form/form_store.dart';
 import 'package:complaintsapp/di/service_locator.dart';
+import 'package:complaintsapp/domain/usecase/user/get_logged_in_user_usecase.dart';
 import 'package:complaintsapp/domain/usecase/user/is_logged_in_usecase.dart';
 import 'package:complaintsapp/domain/usecase/user/save_login_in_status_usecase.dart';
 import 'package:dio/dio.dart';
@@ -18,6 +19,7 @@ class UserStore = _UserStore with _$UserStore;
 abstract class _UserStore with Store {
   // constructor:---------------------------------------------------------------
   _UserStore(
+    this._getLoggedInUserUseCase,
     this._isLoggedInUseCase,
     this._saveLoginStatusUseCase,
     this._loginUseCase,
@@ -30,10 +32,24 @@ abstract class _UserStore with Store {
     // checking if user is logged in
     _isLoggedInUseCase.call(params: null).then((value) async {
       isLoggedIn = value;
+      if (value) {
+        getUser();
+      }
     });
   }
 
+  @action
+  Future getUser() async {
+    try {
+      this.user = await _getLoggedInUserUseCase.call(params: null);
+      print('');
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   // use cases:-----------------------------------------------------------------
+  final GetLoggedInUserUseCase _getLoggedInUserUseCase;
   final IsLoggedInUseCase _isLoggedInUseCase;
   final SaveLoginStatusUseCase _saveLoginStatusUseCase;
   final LoginUseCase _loginUseCase;
@@ -70,6 +86,8 @@ abstract class _UserStore with Store {
   @computed
   bool get isLoading => loginFuture.status == FutureStatus.pending;
 
+  @observable
+  User? user;
   // actions:-------------------------------------------------------------------
   @action
   Future login(String phoneNumber, String password) async {

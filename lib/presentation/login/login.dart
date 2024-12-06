@@ -5,6 +5,7 @@ import 'package:complaintsapp/core/widgets/app_icon_widget.dart';
 import 'package:complaintsapp/core/widgets/empty_app_bar_widget.dart';
 import 'package:complaintsapp/core/widgets/progress_indicator_widget.dart';
 import 'package:complaintsapp/core/widgets/rounded_button_widget.dart';
+import 'package:complaintsapp/core/widgets/textfield_round_widget.dart';
 import 'package:complaintsapp/core/widgets/textfield_widget.dart';
 import 'package:complaintsapp/data/sharedpref/constants/preferences.dart';
 import 'package:complaintsapp/presentation/home/store/theme/theme_store.dart';
@@ -84,11 +85,11 @@ class _LoginScreenState extends State<LoginScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            AppIconWidget(image: 'assets/icons/ic_appicon.png'),
+            AppIconWidget(image: 'assets/icons/logo.png'),
             SizedBox(height: 24.0),
             _buildUserIdField(),
             _buildPasswordField(),
-            //_buildForgotPasswordButton(),
+            _buildForgotPasswordButton(),
             _buildSignInButton()
           ],
         ),
@@ -99,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildUserIdField() {
     return Observer(
       builder: (context) {
-        return TextFieldWidget(
+        return TextFieldRoundedWidget(
           hint: AppLocalizations.of(context).translate('login_et_user_email'),
           inputType: TextInputType.phone,
           icon: Icons.person,
@@ -122,10 +123,11 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildPasswordField() {
     return Observer(
       builder: (context) {
-        return TextFieldWidget(
+        return TextFieldRoundedWidget(
           hint:
               AppLocalizations.of(context).translate('login_et_user_password'),
           isObscure: true,
+          maxLines: 1,
           padding: EdgeInsets.only(top: 16.0),
           icon: Icons.lock,
           iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
@@ -177,7 +179,7 @@ class _LoginScreenState extends State<LoginScreen> {
     SharedPreferences.getInstance().then((prefs) {
       prefs.setBool(Preferences.is_logged_in, true);
     });
-
+    _userStore.getUser();
     Future.delayed(Duration(milliseconds: 0), () {
       Navigator.of(context).pushNamedAndRemoveUntil(
           Routes.home, (Route<dynamic> route) => false);

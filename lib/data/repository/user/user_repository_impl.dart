@@ -22,6 +22,7 @@ class UserRepositoryImpl extends UserRepository {
   Future<User?> login(LoginParams params) async {
     return await _userApi.login(params).then((user) {
       _sharedPrefsHelper.saveAuthToken(user.token!);
+      _sharedPrefsHelper.saveUser(user);
       return user;
     }).catchError((error) => throw error);
   }
@@ -32,4 +33,7 @@ class UserRepositoryImpl extends UserRepository {
 
   @override
   Future<bool> get isLoggedIn => _sharedPrefsHelper.isLoggedIn;
+  
+  @override
+  Future<User?> get loggedInUser => _sharedPrefsHelper.loggedInUser;
 }

@@ -2,7 +2,11 @@ import 'package:complaintsapp/core/data/network/dio/configs/dio_configs.dart';
 import 'package:complaintsapp/core/data/network/dio/dio_client.dart';
 import 'package:complaintsapp/core/data/network/dio/interceptors/auth_interceptor.dart';
 import 'package:complaintsapp/core/data/network/dio/interceptors/logging_interceptor.dart';
-import 'package:complaintsapp/data/network/apis/posts/post_api.dart';
+import 'package:complaintsapp/data/network/apis/checkup/checkup_api.dart';
+import 'package:complaintsapp/data/network/apis/complaint/infraction_api.dart';
+import 'package:complaintsapp/data/network/apis/location/moughataa_api.dart';
+import 'package:complaintsapp/data/network/apis/shop/entreprise_api.dart';
+import 'package:complaintsapp/data/network/apis/shop/merchant_api.dart';
 import 'package:complaintsapp/data/network/apis/user_api.dart';
 import 'package:complaintsapp/data/network/constants/endpoints.dart';
 import 'package:complaintsapp/data/network/interceptors/error_interceptor.dart';
@@ -23,6 +27,7 @@ class NetworkModule {
     getIt.registerSingleton<AuthInterceptor>(
       AuthInterceptor(
         accessToken: () async => await getIt<SharedPreferenceHelper>().authToken,
+        sharedPrefsHelper: getIt<SharedPreferenceHelper>(),
       ),
     );
 
@@ -49,7 +54,11 @@ class NetworkModule {
     );
 
     // api's:-------------------------------------------------------------------
-    getIt.registerSingleton(PostApi(getIt<DioClient>(), getIt<RestClient>()));
     getIt.registerSingleton(UserApi(getIt<DioClient>()));
+    getIt.registerSingleton(MoughataaApi(getIt<DioClient>()));
+    getIt.registerSingleton(EntrepriseApi(getIt<DioClient>()));
+    getIt.registerSingleton(MerchantApi(getIt<DioClient>()));
+    getIt.registerSingleton(CheckupApi(getIt<DioClient>()));
+    getIt.registerSingleton(InfractionApi(getIt<DioClient>()));
   }
 }

@@ -1,3 +1,4 @@
+import 'package:complaintsapp/constants/assets.dart';
 import 'package:complaintsapp/core/stores/error/error_store.dart';
 import 'package:complaintsapp/domain/entity/language/Language.dart';
 import 'package:complaintsapp/domain/repository/setting/setting_repository.dart';
@@ -16,11 +17,25 @@ abstract class _LanguageStore with Store {
   // store for handling errors
   final ErrorStore errorStore;
 
-  // supported languages
   List<Language> supportedLanguages = [
-    Language(code: 'US', locale: 'en', language: 'English'),
-    Language(code: 'DK', locale: 'da', language: 'Danish'),
-    Language(code: 'ES', locale: 'es', language: 'España'),
+    Language(
+      flag: Assets.mauritaniaFlag,
+      code: 'MR',
+      locale: 'ar',
+      language: 'العربية',
+    ),
+    Language(
+      flag: Assets.usaFlag,
+      code: 'US',
+      locale: 'en',
+      language: 'English',
+    ),
+    Language(
+      flag: Assets.franceFlag,
+      code: 'FR',
+      locale: 'fr',
+      language: 'Français',
+    ),
   ];
 
   // constructor:---------------------------------------------------------------

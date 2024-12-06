@@ -4,11 +4,13 @@ import 'package:complaintsapp/core/widgets/app_icon_widget.dart';
 import 'package:complaintsapp/core/widgets/empty_app_bar_widget.dart';
 import 'package:complaintsapp/core/widgets/progress_indicator_widget.dart';
 import 'package:complaintsapp/core/widgets/rounded_button_widget.dart';
+import 'package:complaintsapp/core/widgets/textfield_round_widget.dart';
 import 'package:complaintsapp/core/widgets/textfield_widget.dart';
 import 'package:complaintsapp/data/sharedpref/constants/preferences.dart';
 import 'package:complaintsapp/presentation/home/store/theme/theme_store.dart';
 import 'package:complaintsapp/presentation/login/store/login_store.dart';
 import 'package:complaintsapp/utils/device/device_utils.dart';
+import 'package:complaintsapp/utils/dialogs/dialog_utils.dart';
 import 'package:complaintsapp/utils/locale/app_localization.dart';
 import 'package:complaintsapp/utils/routes/routes.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +27,7 @@ class AddComplaintScreen extends StatefulWidget {
 class _AddComplaintScreenState extends State<AddComplaintScreen> {
   //text controllers:-----------------------------------------------------------
   TextEditingController _userPhoneController = TextEditingController();
+  TextEditingController _greenNumberController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
   //stores:---------------------------------------------------------------------
@@ -162,21 +165,34 @@ class _AddComplaintScreenState extends State<AddComplaintScreen> {
   Widget _buildGreenNumberField() {
     return Observer(
       builder: (context) {
-        return TextFieldWidget(
-          hint: 'Numero Vert',
-          inputType: TextInputType.phone,
-          icon: Icons.person,
-          iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
-          textController: _userPhoneController,
-          inputAction: TextInputAction.next,
-          autoFocus: false,
-          onChanged: (value) {
-            _formStore.setUserId(_userPhoneController.text);
+        return GestureDetector(
+          onTap: () async {
+            final res = await DialogUtils.buildSelectItemsDialog(
+              context: context,
+              title: 'Select Green Number',
+              items: ["8885124", "88885652"]
+            );
+            if (res != null) {
+              _greenNumberController.text = res;             
+            }
           },
-          onFieldSubmitted: (value) {
-            FocusScope.of(context).requestFocus(_passwordFocusNode);
-          },
-          errorText: _formStore.formErrorStore.phoneNumber,
+          child: TextFieldRoundedWidget(
+            hint: 'Numero Vert',
+            inputType: TextInputType.phone,
+            //icon: Icons.person,
+            iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
+            textController: _greenNumberController,
+            inputAction: TextInputAction.next,
+            enabled: false,
+            autoFocus: false,
+            onChanged: (value) {
+              _formStore.setUserId(_greenNumberController.text);
+            },
+            onFieldSubmitted: (value) {
+              FocusScope.of(context).requestFocus(_passwordFocusNode);
+            },
+            errorText: _formStore.formErrorStore.phoneNumber,
+          ),
         );
       },
     );
